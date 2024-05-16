@@ -1,5 +1,4 @@
 // src/script.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('currentUser');
 
@@ -9,7 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
         })
-            .then(response => response.json()) // Parse directly as JSON
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse directly as JSON
+            })
             .then(data => {
                 console.log('Response Data:', data); // Log the response data
                 if (data.success) {
@@ -45,7 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateBookedList() {
         fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings') // Use deployed server URL
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 const bookedList = document.getElementById('booked-startups-list');
                 bookedList.innerHTML = ''; // Clear previous list

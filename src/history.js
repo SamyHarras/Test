@@ -1,9 +1,8 @@
 // src/history.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const historyContainer = document.getElementById('history-container');
 
-    fetch('https://matchingplatform-fab-maroc.onrender.com/api/history') // Changed to use deployed server URL
+    fetch('https://matchingplatform-fab-maroc.onrender.com/api/history') // Use deployed server URL
         .then(response => response.json())
         .then(history => {
             history.forEach(record => {
