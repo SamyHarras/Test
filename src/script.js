@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('currentUser');
 
     function bookMeeting(expertName) {
-        fetch('https://matchingplatform-fab-maroc.onrender.com/api/book', {
+        fetch('/api/book', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json(); // Use text() instead of json() to handle empty responses
+                return response.json(); // Parse JSON response
             })
             .then(data => {
                 if (!data) {
@@ -50,12 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBookedList() {
-        fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings')
+        fetch('/api/bookings')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json(); // Use text() instead of json() to handle empty responses
+                return response.json(); // Parse JSON response
             })
             .then(data => {
                 if (!data) {
