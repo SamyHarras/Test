@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('currentUser');
 
     function bookMeeting(expertName) {
-        fetch('https://matchingplatform-fab-maroc.onrender.com/api/book', { // Changed to use deployed server URL
+        fetch('https://matchingplatform-fab-maroc.onrender.com/api/book', { // Use deployed server URL
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBookedList() {
-        fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings') // Changed to use deployed server URL
+        fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings') // Use deployed server URL
             .then(response => response.json())
             .then(data => {
                 const bookedList = document.getElementById('booked-startups-list');
