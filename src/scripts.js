@@ -19,9 +19,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const user = users.find(user => user.username === username && user.password === password);
-
-    if (user) {
+    if (username && password) {
         localStorage.setItem('currentUser', username);
         window.location.href = "matchmakingPage.html";
     } else {
