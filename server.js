@@ -1,11 +1,9 @@
-// server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000; // Use the port provided by Render.com or default to 3000
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,6 +22,8 @@ app.get('/api/history', (req, res) => {
 });
 
 app.post('/api/book', (req, res) => {
+    console.log('Received booking request:', req.body); // Log the incoming request
+
     const { userName, expertName } = req.body;
     if (!bookings[userName]) {
         bookings[userName] = [];
@@ -42,7 +42,10 @@ app.post('/api/book', (req, res) => {
         message = `Booked a meeting with ${expertName}`;
     }
 
-    res.json({ success: true, booked, message });
+    console.log('Updated bookings:', bookings); // Log the updated bookings
+    console.log('Updated booking history:', bookingHistory); // Log the updated booking history
+
+    res.json({ success: true, booked, message }); // Send the response
 });
 
 app.post('/api/clear', (req, res) => {
