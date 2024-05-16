@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const fs = require('fs');
 const app = express();
@@ -20,7 +19,22 @@ app.post('/api/book', (req, res) => {
             return res.status(500).json({ success: false, message: 'Internal server error' });
         }
 
-        const jsonData = JSON.parse(data);
+        let jsonData;
+        try {
+            jsonData = JSON.parse(data);
+        } catch (err) {
+            console.error('Error parsing JSON:', err);
+            return res.status(500).json({ success: false, message: 'Error parsing JSON' });
+        }
+
+        // Ensure bookings and bookingHistory are initialized
+        if (!jsonData.bookings) {
+            jsonData.bookings = {};
+        }
+        if (!jsonData.bookingHistory) {
+            jsonData.bookingHistory = [];
+        }
+
         if (!jsonData.bookings[userName]) {
             jsonData.bookings[userName] = [];
         }
@@ -29,7 +43,7 @@ app.post('/api/book', (req, res) => {
             jsonData.bookingHistory.push({ userName, expertName, timestamp: new Date() });
         }
 
-        fs.writeFile(dataPath, JSON.stringify(jsonData), (err) => {
+        fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2), (err) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -48,7 +62,14 @@ app.get('/api/bookings', (req, res) => {
             return res.status(500).json({ success: false, message: 'Internal server error' });
         }
 
-        const jsonData = JSON.parse(data);
+        let jsonData;
+        try {
+            jsonData = JSON.parse(data);
+        } catch (err) {
+            console.error('Error parsing JSON:', err);
+            return res.status(500).json({ success: false, message: 'Error parsing JSON' });
+        }
+
         return res.status(200).json(jsonData.bookings);
     });
 });

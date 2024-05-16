@@ -1,9 +1,8 @@
-// src/script.js
 document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('currentUser');
 
     function bookMeeting(expertName) {
-        fetch('https://matchingplatform-fab-maroc.onrender.com/api/book', { // Use deployed server URL
+        fetch('https://matchingplatform-fab-maroc.onrender.com/api/book', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
@@ -12,10 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json(); // Parse directly as JSON
+                return response.text(); // Use text() instead of json() to handle empty responses
             })
-            .then(data => {
-                console.log('Response Data:', data); // Log the response data
+            .then(text => {
+                if (!text) {
+                    throw new Error('Empty response');
+                }
+                const data = JSON.parse(text);
+                console.log('Response Data:', data);
                 if (data.success) {
                     updateButton(expertName, data.booked);
                     updateBookedList();
@@ -48,14 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBookedList() {
-        fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings') // Use deployed server URL
+        fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
+                return response.text(); // Use text() instead of json() to handle empty responses
             })
-            .then(data => {
+            .then(text => {
+                if (!text) {
+                    throw new Error('Empty response');
+                }
+                const data = JSON.parse(text);
                 const bookedList = document.getElementById('booked-startups-list');
                 bookedList.innerHTML = ''; // Clear previous list
                 if (data[userName]) {
