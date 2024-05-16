@@ -9,16 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
         })
-            .then(response => response.text()) // Changed to text() to debug the response
-            .then(text => {
-                console.log('Response Text:', text); // Log the response text
-                const data = JSON.parse(text); // Parse the text as JSON
+            .then(response => response.json()) // Parse directly as JSON
+            .then(data => {
+                console.log('Response Data:', data); // Log the response data
                 if (data.success) {
                     updateButton(expertName, data.booked);
                     updateBookedList();
                     alert(data.message);
                 } else {
-                    alert('Error booking the meeting');
+                    alert('Error booking the meeting: ' + data.message);
                 }
             })
             .catch(err => {
