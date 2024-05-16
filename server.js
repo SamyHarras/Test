@@ -15,7 +15,7 @@ app.post('/api/book', (req, res) => {
 
     fs.readFile(dataPath, 'utf8', (err, data) => {
         if (err) {
-            console.error(err);
+            console.error('Error reading data file:', err);
             return res.status(500).json({ success: false, message: 'Internal server error' });
         }
 
@@ -45,7 +45,7 @@ app.post('/api/book', (req, res) => {
 
         fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2), (err) => {
             if (err) {
-                console.error(err);
+                console.error('Error writing data file:', err);
                 return res.status(500).json({ success: false, message: 'Internal server error' });
             }
 
@@ -58,7 +58,7 @@ app.post('/api/book', (req, res) => {
 app.get('/api/bookings', (req, res) => {
     fs.readFile(dataPath, 'utf8', (err, data) => {
         if (err) {
-            console.error(err);
+            console.error('Error reading data file:', err);
             return res.status(500).json({ success: false, message: 'Internal server error' });
         }
 
