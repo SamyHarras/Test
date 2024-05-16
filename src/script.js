@@ -7,17 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse JSON response
-            })
+            .then(response => response.json())
             .then(data => {
-                if (!data) {
-                    throw new Error('Empty response');
-                }
-                console.log('Response Data:', data);
                 if (data.success) {
                     updateButton(expertName, data.booked);
                     updateBookedList();
@@ -26,10 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Error booking the meeting: ' + data.message);
                 }
             })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('An error occurred while booking the meeting');
-            });
+            .catch(err => alert('An error occurred while booking the meeting'));
     }
 
     function updateButton(expertName, booked) {
@@ -51,18 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateBookedList() {
         fetch('/api/bookings')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse JSON response
-            })
+            .then(response => response.json())
             .then(data => {
-                if (!data) {
-                    throw new Error('Empty response');
-                }
                 const bookedList = document.getElementById('booked-startups-list');
-                bookedList.innerHTML = ''; // Clear previous list
+                bookedList.innerHTML = '';
                 if (data[userName]) {
                     data[userName].forEach(expertName => {
                         const listItem = document.createElement('li');
