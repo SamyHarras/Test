@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Error booking the meeting: ' + data.message);
                 }
             })
-            .catch(err => alert('An error occurred while booking the meeting'));
+            .catch(err => alert('An error occurred while booking the meeting: ' + err.message));
     }
 
     function updateButton(expertName, booked) {
