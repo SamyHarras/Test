@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const bookingsContainer = document.getElementById('bookings-container');
     const startupsContainer = document.getElementById('startups-container');
 
-    // Fetch bookings from the server instead of using localStorage
-    fetch('http://localhost:3000/api/bookings') // Changed to fetch from server
+    // Fetch bookings from the deployed server instead of using localStorage
+    fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings') // Changed to use deployed server URL
         .then(response => response.json())
         .then(bookings => {
             // Helper function to generate a safe ID from a username
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => console.error('Error fetching bookings:', err)); // Added error handling for fetch
 
     window.clearBookings = function() {
-        fetch('http://localhost:3000/api/clear', { method: 'POST' }) // Changed to use server API to clear bookings
+        fetch('https://matchingplatform-fab-maroc.onrender.com/api/clear', { method: 'POST' }) // Changed to use deployed server URL
             .then(() => {
                 alert('All bookings have been cleared.');
                 location.reload();
