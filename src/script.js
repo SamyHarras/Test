@@ -11,13 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.text(); // Use text() instead of json() to handle empty responses
+                return response.json(); // Use text() instead of json() to handle empty responses
             })
-            .then(text => {
-                if (!text) {
+            .then(data => {
+                if (!data) {
                     throw new Error('Empty response');
                 }
-                const data = JSON.parse(text);
                 console.log('Response Data:', data);
                 if (data.success) {
                     updateButton(expertName, data.booked);
@@ -40,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.classList.add('booked');
                 button.style.backgroundColor = 'orange';
                 button.textContent = 'Cancel Meeting';
-                button.style.pointerEvents = 'auto';
+                button.style.pointerEvents = 'none';
             } else {
                 button.classList.remove('booked');
                 button.style.backgroundColor = '';
@@ -56,13 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.text(); // Use text() instead of json() to handle empty responses
+                return response.json(); // Use text() instead of json() to handle empty responses
             })
-            .then(text => {
-                if (!text) {
+            .then(data => {
+                if (!data) {
                     throw new Error('Empty response');
                 }
-                const data = JSON.parse(text);
                 const bookedList = document.getElementById('booked-startups-list');
                 bookedList.innerHTML = ''; // Clear previous list
                 if (data[userName]) {

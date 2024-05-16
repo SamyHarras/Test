@@ -1,9 +1,10 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const app = express();
 app.use(express.json());
 
-const dataPath = './data.json';
+const dataPath = path.join(__dirname, 'data.json');
 
 // Endpoint to book a meeting
 app.post('/api/book', (req, res) => {
