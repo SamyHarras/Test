@@ -1,3 +1,5 @@
+// src/adminScript.js
+
 document.addEventListener('DOMContentLoaded', () => {
     const bookingsContainer = document.getElementById('bookings-container');
     const startupsContainer = document.getElementById('startups-container');
@@ -8,21 +10,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return username.toLowerCase().replace(/[^a-z0-9]+/g, '');
     }
 
+    // Clear existing content in containers
+    bookingsContainer.innerHTML = '';
+    startupsContainer.innerHTML = '';
+
     // Populate user boxes
     for (const [user, experts] of Object.entries(bookings)) {
         const userId = generateUserId(user);
-        const userBox = document.getElementById(userId);
-        if (userBox) {
-            const startupList = userBox.querySelector('.startup-list');
-            startupList.innerHTML = ''; // Clear previous content
-            experts.forEach(expert => {
-                const expertItem = document.createElement('li');
-                expertItem.textContent = expert;
-                startupList.appendChild(expertItem);
-            });
-        } else {
-            console.warn(`User box for user ID '${userId}' not found.`);
+        let userBox = document.getElementById(userId);
+
+        // Create user box if it does not exist
+        if (!userBox) {
+            userBox = document.createElement('div');
+            userBox.className = 'user-box';
+            userBox.id = userId;
+            userBox.innerHTML = `<div class="user-name">${user}</div><ul class="startup-list"></ul>`;
+            bookingsContainer.appendChild(userBox);
         }
+
+        const startupList = userBox.querySelector('.startup-list');
+        startupList.innerHTML = ''; // Clear previous content
+
+        // Populate user-specific bookings
+        experts.forEach(expert => {
+            const expertItem = document.createElement('li');
+            expertItem.textContent = expert;
+            startupList.appendChild(expertItem);
+        });
     }
 
     // Create a list of all startups
@@ -46,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const content = faqItem.querySelector('.faq-item-content');
+
+        // Populate startup-specific bookings
         for (const [user, experts] of Object.entries(bookings)) {
             if (experts.includes(startup)) {
                 const userItem = document.createElement('p');
@@ -55,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Function to clear all bookings
     window.clearBookings = function() {
         localStorage.removeItem('bookings');
         alert('All bookings have been cleared.');
