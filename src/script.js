@@ -9,8 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userName, expertName })
         })
-            .then(response => response.json())
-            .then(data => {
+            .then(response => response.text()) // Changed to text() to debug the response
+            .then(text => {
+                console.log('Response Text:', text); // Log the response text
+                const data = JSON.parse(text); // Parse the text as JSON
                 if (data.success) {
                     updateButton(expertName, data.booked);
                     updateBookedList();
@@ -19,7 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Error booking the meeting');
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.error('Error:', err);
+                alert('An error occurred while booking the meeting');
+            });
     }
 
     function updateButton(expertName, booked) {
@@ -40,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBookedList() {
-        fetch(`https://matchingplatform-fab-maroc.onrender.com/api/bookings`) // Changed to use deployed server URL
+        fetch('https://matchingplatform-fab-maroc.onrender.com/api/bookings') // Changed to use deployed server URL
             .then(response => response.json())
             .then(data => {
                 const bookedList = document.getElementById('booked-startups-list');
