@@ -2,20 +2,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('currentUser');
 
     function bookMeeting(expertName) {
-        fetch('/api/book', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userName, expertName })
+        db.collection('bookings').doc(userName).update({
+            experts: firebase.firestore.FieldValue.arrayUnion(expertName)
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateButton(expertName, data.booked);
-                    updateBookedList();
-                    alert(data.message);
-                } else {
-                    alert('Error booking the meeting: ' + data.message);
-                }
+            .then(() => {
+                return db.collection('bookingHistory').add({
+                    userName,
+                    expertName,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(() => {
+                updateButton(expertName, true);
+                updateBookedList();
+                alert('Meeting booked successfully');
             })
             .catch(err => alert('An error occurred while booking the meeting: ' + err.message));
     }
@@ -38,13 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBookedList() {
-        fetch('/api/bookings')
-            .then(response => response.json())
-            .then(data => {
+        db.collection('bookings').doc(userName).get()
+            .then(doc => {
                 const bookedList = document.getElementById('booked-startups-list');
                 bookedList.innerHTML = '';
-                if (data[userName]) {
-                    data[userName].forEach(expertName => {
+                if (doc.exists) {
+                    doc.data().experts.forEach(expertName => {
                         const listItem = document.createElement('li');
                         listItem.textContent = expertName;
                         bookedList.appendChild(listItem);
@@ -64,6 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateBookedList();
 });
+
+function switchTheme() {
+    document.body.classList.toggle('dark-mode');
+}
 
 function searchExperts() {
     const searchTerm = document.getElementById('search-bar').value.toLowerCase();
