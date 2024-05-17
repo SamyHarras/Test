@@ -1,3 +1,5 @@
+import * as firebase from "firebase-admin";
+
 document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('currentUser');
 
